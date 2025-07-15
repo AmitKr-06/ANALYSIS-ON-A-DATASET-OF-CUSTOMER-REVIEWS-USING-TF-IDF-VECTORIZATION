@@ -1,0 +1,57 @@
+## Step 1: Import Required library
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+## Step 2: Load the Dataset
+df = pd.read_csv("C:\\Users\\ASUS\\Desktop\\MLProject\\IMDB Dataset.csv") 
+df.head()
+
+## Step 3: Clean null values
+df.dropna(inplace=True)
+
+## Step 4: Convert sentiments to binary
+df['sentiment'] = df['sentiment'].map({'positive': 1, 'negative': 0}) 
+
+## Step 5: Categories Into Independent Feature (X) and Dependent Feature(y) Or Target(y)
+X = df['review']
+y = df['sentiment']
+
+## Step 6: Split Data into Train and Test
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+## Step 7: Term Frequency(TF)-Inverse Document Frequency(IDF) Vectorization
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf = TfidfVectorizer(stop_words='english', max_features=5000)
+X_train_tfidf = tfidf.fit_transform(X_train)
+X_test_tfidf = tfidf.transform(X_test)
+
+## Step 8: Train Logistic Regression Model
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+model.fit(X_train_tfidf, y_train)
+
+## Step 9: Predict the Model
+y_pred = model.predict(X_test_tfidf)
+
+## Step 10: Evaluate the Accuracy of Model
+from sklearn.metrics import accuracy_score
+print("Accuracy Score:", accuracy_score(y_test, y_pred))
+
+## Step 11: Evaluate the Classification Report of Model
+from sklearn.metrics import classification_report
+print("Classification Report:", classification_report(y_test, y_pred))
+
+## Step 12: Confusion Matrix of Model
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+## Step 13: Plot the Confusion Matrix
+plt.figure(figsize=(6,4))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.title('Confusion Matrix')
+plt.show()
