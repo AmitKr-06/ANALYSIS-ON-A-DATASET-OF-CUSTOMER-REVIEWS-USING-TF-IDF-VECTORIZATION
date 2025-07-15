@@ -29,4 +29,4 @@ Step 7: Visualize the Results
 Plot a confusion matrix which showing the number of correct vs incorrect predictions.
 
 OUTPUT:
-
+<img width="1838" height="871" alt="Image" src="https://github.com/user-attachments/assets/46714f3c-fdfb-4bfa-bb3e-6ddd9d6db59d" />
